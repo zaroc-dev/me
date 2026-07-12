@@ -1,0 +1,126 @@
+---
+import type { SiteContent } from '../content';
+import ShowcaseLayout from '../layouts/ShowcaseLayout.astro';
+interface Props { content: SiteContent }
+const { content } = Astro.props;
+const other = content.locale === 'en' ? 'de' : 'en';
+const copy = content.locale === 'de'
+  ? {
+      archive: 'Das digitale Kompendium', entry: 'Eintrag', field: 'Technische Informatik · Software Craft',
+      prologue: 'Prolog', prologueText: 'Zwischen Code und Maschine',
+      thesis: 'Ich baue digitale Werkzeuge, erforsche Systeme und verwandle Ideen in kleine Welten, die andere betreten können.',
+      artifacts: 'Artefakte', collection: 'Eine Sammlung gebauter Dinge', inspect: 'Artefakt untersuchen',
+      chronicle: 'Chronik', path: 'Der bisherige Pfad', pursuits: 'Nebenquests', beyond: 'Jenseits des Codes',
+      final: 'Ein neues Kapitel beginnen', finalText: 'Die besten Systeme beginnen mit einer guten Frage. Was wollen wir gemeinsam herausfinden?',
+      write: 'Nachricht senden', coordinates: 'Baden-Württemberg · Deutschland',
+    }
+  : {
+      archive: 'The digital compendium', entry: 'Entry', field: 'Technical computing · Software craft',
+      prologue: 'Prologue', prologueText: 'Between code and machine',
+      thesis: 'I build digital tools, investigate systems, and turn ideas into small worlds that other people can enter.',
+      artifacts: 'Artifacts', collection: 'A collection of built things', inspect: 'Inspect artifact',
+      chronicle: 'Chronicle', path: 'The path so far', pursuits: 'Side quests', beyond: 'Beyond the code',
+      final: 'Begin a new chapter', finalText: 'The best systems begin with a good question. What should we discover together?',
+      write: 'Send a message', coordinates: 'Baden-Württemberg · Germany',
+    };
+const roman = ['I', 'II', 'III', 'IV', 'V', 'VI'];
+---
+<ShowcaseLayout content={content} design="codex" designTitle="The ZAROC Codex">
+  <div class="cx-noise" aria-hidden="true"></div>
+  <header class="cx-header">
+    <a class="cx-seal" href={`/${content.locale}/codex/`} aria-label="ZAROC Codex home"><span>Z</span><i></i></a>
+    <p><b>ZAROC CODEX</b><span>{copy.archive}</span></p>
+    <nav>
+      <a href="#artifacts">{copy.artifacts}</a><a href="#chronicle">{copy.chronicle}</a><a href="#pursuits">{copy.pursuits}</a>
+    </nav>
+    <a class="cx-language" href={`/${other}/codex/`} lang={other}>{other.toUpperCase()}</a>
+  </header>
+
+  <main id="variant-main">
+    <section class="cx-hero">
+      <div class="cx-stars" aria-hidden="true">{Array.from({ length: 28 }).map((_, i) => <i style={`--x:${(i * 37 + 9) % 92}%;--y:${(i * 53 + 7) % 86}%;--o:${0.15 + (i % 5) * 0.1}`}></i>)}</div>
+      <div class="cx-side-note left"><span>49°00′ N</span><i></i><span>8°24′ E</span></div>
+      <div class="cx-side-note right"><span>{copy.field}</span><i></i><span>MMXXVI</span></div>
+      <div class="cx-astral" aria-hidden="true">
+        <div class="cx-ring ring-one"><i></i><i></i></div>
+        <div class="cx-ring ring-two"><i></i></div>
+        <svg viewBox="0 0 500 500"><path d="M250 44 294 184l150 66-150 66-44 140-44-140-150-66 150-66 44-140Z"/><circle cx="250" cy="250" r="93"/><path d="M104 104 396 396m0-292L104 396"/></svg>
+      </div>
+      <div class="cx-hero-copy">
+        <p><span>{copy.entry}</span> // 00</p>
+        <h1><small>THE</small><strong>ZAROC</strong><em>CODEX</em></h1>
+        <div class="cx-hero-rule"><i></i><span>✦</span><i></i></div>
+        <p class="cx-hero-intro">Arthur Aktamirov<br />{content.hero.eyebrow}</p>
+      </div>
+      <a class="cx-descend" href="#prologue"><span>{copy.prologue}</span><i>↓</i></a>
+    </section>
+
+    <section class="cx-prologue" id="prologue">
+      <div class="cx-chapter"><span>CHAPTER</span><b>00</b></div>
+      <div class="cx-prologue-title"><p>{copy.prologue}</p><h2>{copy.prologueText}</h2></div>
+      <div class="cx-prologue-copy">
+        <p class="cx-dropcap">{copy.thesis}</p>
+        <p>{content.hero.intro}</p>
+        <dl>{content.stats.slice(0, 3).map((stat) => <div><dt>{stat.value}</dt><dd>{stat.label}</dd></div>)}</dl>
+      </div>
+      <div class="cx-flourish" aria-hidden="true"><i></i><span>✦</span><i></i></div>
+    </section>
+
+    <section class="cx-artifacts" id="artifacts" aria-labelledby="cx-artifacts-title">
+      <header class="cx-section-header">
+        <div class="cx-chapter"><span>CHAPTER</span><b>01</b></div>
+        <div><p>{copy.artifacts}</p><h2 id="cx-artifacts-title">{copy.collection}</h2></div>
+        <span class="cx-header-mark" aria-hidden="true">⌬</span>
+      </header>
+      <div class="cx-artifact-grid">
+        {content.work.projects.slice(0, 6).map((project, index) => (
+          <article class={`cx-artifact artifact-${index + 1}`}>
+            <div class="cx-card-ornament" aria-hidden="true"><i></i><span>{roman[index]}</span><i></i></div>
+            <p class="cx-artifact-kind">{project.status} · {project.tags[0]}</p>
+            <h3>{project.title}</h3>
+            <p>{project.description}</p>
+            <ul>{project.tags.map((tag) => <li>{tag}</li>)}</ul>
+            {project.metric && <strong>{project.metric}<small>{project.metricLabel}</small></strong>}
+            {project.href && <a href={project.href} target="_blank" rel="noreferrer"><span>{copy.inspect}</span><b>↗</b></a>}
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="cx-chronicle" id="chronicle" aria-labelledby="cx-chronicle-title">
+      <header class="cx-section-header">
+        <div class="cx-chapter"><span>CHAPTER</span><b>02</b></div>
+        <div><p>{copy.chronicle}</p><h2 id="cx-chronicle-title">{copy.path}</h2></div>
+        <span class="cx-header-mark" aria-hidden="true">☽</span>
+      </header>
+      <div class="cx-chronicle-line">
+        {content.journey.items.map((item, index) => (
+          <article>
+            <span class="cx-node"><i></i>{String(index + 1).padStart(2, '0')}</span>
+            <time>{item.date}</time><h3>{item.title}</h3>{item.place && <small>{item.place}</small>}<p>{item.description}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="cx-pursuits" id="pursuits" aria-labelledby="cx-pursuits-title">
+      <header class="cx-section-header">
+        <div class="cx-chapter"><span>CHAPTER</span><b>03</b></div>
+        <div><p>{copy.pursuits}</p><h2 id="cx-pursuits-title">{copy.beyond}</h2></div>
+        <span class="cx-header-mark" aria-hidden="true">✧</span>
+      </header>
+      <div class="cx-pursuit-wheel">
+        <div class="cx-wheel-center"><span>Z</span><small>{content.lab.quote}</small></div>
+        {content.lab.cards.map((card, index) => <article class={`cx-pursuit pursuit-${index + 1}`}><span>{card.code}</span><h3>{card.title}</h3><p>{card.description}</p></article>)}
+      </div>
+    </section>
+
+    <section class="cx-contact" id="contact">
+      <div class="cx-contact-sigil" aria-hidden="true"><span>✦</span></div>
+      <p>EPILOGUE · 04</p><h2>{copy.final}</h2><p>{copy.finalText}</p>
+      <a href="mailto:arthur.aktamirov@zaroc.de">{copy.write}<span>↗</span></a>
+      <small>{copy.coordinates}</small>
+    </section>
+  </main>
+  <footer class="cx-footer"><span>THE ZAROC CODEX · MMXXVI</span><i>✦</i><span>ARTHUR AKTAMIROV</span></footer>
+</ShowcaseLayout>

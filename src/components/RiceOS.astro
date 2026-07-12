@@ -1,0 +1,209 @@
+---
+import type { SiteContent } from '../content';
+import ShowcaseLayout from '../layouts/ShowcaseLayout.astro';
+interface Props { content: SiteContent }
+const { content } = Astro.props;
+const other = content.locale === 'en' ? 'de' : 'en';
+const copy = content.locale === 'de'
+  ? {
+      overview: 'Übersicht', projects: 'Projekte', timeline: 'Aktivität', contact: 'Kontakt',
+      applications: 'Anwendungen', about: 'about_me.md', session: 'Arthur // ZAROC', welcome: 'Willkommen in meinem Workspace.',
+      intro: 'Softwareentwickler, Student und Linux-Enthusiast aus Baden-Württemberg.',
+      openProjects: 'Projekt-Workspace öffnen', terminal: 'terminal — zsh', terminalHint: '„help“ für Befehle eingeben',
+      projectBrowser: 'project_browser', selected: 'ausgewählte Projekte', activity: 'activity.log', lab: 'side_quests',
+      message: 'Verbindung herstellen', messageText: 'Für Projekte, Kollaborationen und angenehm nerdige Gespräche.',
+      email: 'E-Mail schreiben', copied: 'Handle kopiert', system: 'System läuft stabil',
+      help: 'Befehle: help, about, projects, github, lang de|en, clear',
+      unknown: 'Befehl nicht gefunden. „help“ zeigt alle Befehle.', now: 'gerade eben', allSystems: 'alle systeme nominal',
+    }
+  : {
+      overview: 'Overview', projects: 'Projects', timeline: 'Activity', contact: 'Contact',
+      applications: 'Applications', about: 'about_me.md', session: 'Arthur // ZAROC', welcome: 'Welcome to my workspace.',
+      intro: 'Software engineer, student, and Linux enthusiast based in Baden-Württemberg.',
+      openProjects: 'Open project workspace', terminal: 'terminal — zsh', terminalHint: 'type “help” for commands',
+      projectBrowser: 'project_browser', selected: 'selected projects', activity: 'activity.log', lab: 'side_quests',
+      message: 'Establish a connection', messageText: 'For projects, collaborations, and pleasantly nerdy conversations.',
+      email: 'Write an email', copied: 'Handle copied', system: 'System running stable',
+      help: 'commands: help, about, projects, github, lang de|en, clear',
+      unknown: 'command not found. type “help” for available commands.', now: 'just now', allSystems: 'all systems nominal',
+    };
+---
+<ShowcaseLayout content={content} design="riceos" designTitle="RiceOS">
+  <div class="ri-desktop" data-rice-desktop>
+    <header class="ri-topbar">
+      <div class="ri-os-name"><span>⌁</span><b>riceOS</b><small>zaroc@framework</small></div>
+      <div class="ri-workspaces" role="tablist" aria-label="Workspaces">
+        {[
+          ['home', '1', copy.overview], ['projects', '2', copy.projects], ['activity', '3', copy.timeline], ['contact', '4', copy.contact],
+        ].map(([id, number, label], index) => (
+          <button type="button" role="tab" aria-selected={index === 0 ? 'true' : 'false'} data-ri-target={id}><span>{number}</span><small>{label}</small></button>
+        ))}
+      </div>
+      <div class="ri-tray">
+        <span class="ri-palette" aria-label="OS color palette"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+        <span class="ri-tray-icon">◉</span><span class="ri-tray-icon">⌁</span>
+        <time data-ri-clock>00:00</time>
+        <a href={`/${other}/riceos/`} lang={other}>{other.toUpperCase()}</a>
+      </div>
+    </header>
+
+    <div class="ri-wallpaper" aria-hidden="true">
+      <div class="ri-wallpaper-grid"></div><div class="ri-sun"><i></i></div>
+      <p>ZAROC</p><span>BUILD / BREAK / LEARN / REPEAT</span>
+      <svg viewBox="0 0 1600 900" preserveAspectRatio="none"><path d="M0 713 270 490l140 123 210-279 211 290 170-162 236 251 186-298 177 190"/><path d="M0 768 287 613l126 84 213-190 196 186 188-104 206 135 203-160 181 103"/></svg>
+    </div>
+
+    <main id="variant-main" class="ri-stage">
+      <section class="ri-workspace ri-home" data-ri-workspace="home" role="tabpanel">
+        <article class="ri-window ri-about-window">
+          <header class="ri-window-bar"><span class="ri-window-dots"><i></i><i></i><i></i></span><b>{copy.about}</b><small>~/portfolio</small></header>
+          <div class="ri-about-body">
+            <aside>
+              <div class="ri-avatar"><span>ZA</span><i></i></div>
+              <strong>{copy.session}</strong><small>{content.system.location}</small>
+              <span class="ri-online"><i></i>{content.system.online}</span>
+            </aside>
+            <div class="ri-about-copy">
+              <p class="ri-comment"># {copy.welcome}</p>
+              <h1>Arthur<br /><span>“ZAROC”</span><br />Aktamirov</h1>
+              <p>{copy.intro}</p>
+              <ul>{content.hero.terminal.slice(2).map((line) => <li><span>{line.key}</span>{line.value}</li>)}</ul>
+              <button type="button" data-ri-jump="projects">{copy.openProjects}<span>→</span></button>
+            </div>
+          </div>
+        </article>
+
+        <article class="ri-window ri-terminal-window">
+          <header class="ri-window-bar"><span class="ri-window-dots"><i></i><i></i><i></i></span><b>{copy.terminal}</b><small>80×24</small></header>
+          <div class="ri-terminal-body">
+            <div class="ri-neofetch">
+              <pre aria-hidden="true"> ╭────╮
+ │ ZA │
+ ╰─┬──╯</pre>
+              <dl><div><dt>os</dt><dd>riceOS 4.0</dd></div><div><dt>host</dt><dd>zaroc.dev</dd></div><div><dt>shell</dt><dd>zsh + astro</dd></div><div><dt>uptime</dt><dd>always learning</dd></div></dl>
+            </div>
+            <div class="ri-terminal-output" data-ri-output><p><span>system</span> {copy.allSystems}</p><p class="muted">{copy.terminalHint}</p></div>
+            <form class="ri-terminal-form" data-ri-terminal data-help={copy.help} data-unknown={copy.unknown} data-about={copy.intro}>
+              <label for={`terminal-${content.locale}`}><span>zaroc@rice</span>:<b>~</b>$</label>
+              <input id={`terminal-${content.locale}`} name="command" autocomplete="off" spellcheck="false" />
+            </form>
+          </div>
+        </article>
+
+        <aside class="ri-widget-stack">
+          <div class="ri-widget"><span>LOCAL</span><time data-ri-clock-large>00:00</time><small>Europe / Berlin</small></div>
+          <div class="ri-widget status"><span>STATUS</span><i></i><strong>{copy.system}</strong><small>{copy.now}</small></div>
+        </aside>
+      </section>
+
+      <section class="ri-workspace ri-projects" data-ri-workspace="projects" role="tabpanel" hidden>
+        <article class="ri-window ri-project-browser">
+          <header class="ri-window-bar"><span class="ri-window-dots"><i></i><i></i><i></i></span><b>{copy.projectBrowser}</b><small>~/{copy.selected}</small></header>
+          <div class="ri-browser-body">
+            <aside><p>{copy.applications}</p>{content.work.projects.map((project, index) => <button type="button" class:list={{ active: index === 0 }} data-ri-project={project.id}><span>{project.index}</span>{project.title}<i>{project.status}</i></button>)}</aside>
+            <div class="ri-project-detail">
+              {content.work.projects.map((project, index) => (
+                <article data-ri-project-panel={project.id} hidden={index !== 0}>
+                  <div class="ri-detail-head"><span>PROJECT::{project.index}</span><i>{project.status}</i></div>
+                  <h2>{project.title}</h2><p>{project.description}</p>
+                  {project.metric && <div class="ri-project-metric"><strong>{project.metric}</strong><span>{project.metricLabel}</span></div>}
+                  <ul>{project.tags.map((tag) => <li>{tag}</li>)}</ul>
+                  {project.href && <a href={project.href} target="_blank" rel="noreferrer">{content.work.viewProject}<span>↗</span></a>}
+                  <div class="ri-detail-art" aria-hidden="true"><span>{project.title.slice(0, 2).toUpperCase()}</span><i></i><i></i></div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="ri-workspace ri-activity" data-ri-workspace="activity" role="tabpanel" hidden>
+        <article class="ri-window ri-log-window">
+          <header class="ri-window-bar"><span class="ri-window-dots"><i></i><i></i><i></i></span><b>{copy.activity}</b><small>tail -f career.log</small></header>
+          <div class="ri-log-body">{content.journey.items.map((item, index) => <article><span>{item.date}</span><i></i><div><small>event/{String(index + 1).padStart(2, '0')}</small><h2>{item.title}</h2>{item.place && <b>{item.place}</b>}<p>{item.description}</p></div></article>)}</div>
+        </article>
+        <article class="ri-window ri-quests-window">
+          <header class="ri-window-bar"><span class="ri-window-dots"><i></i><i></i><i></i></span><b>{copy.lab}</b><small>4 active</small></header>
+          <div class="ri-quests-body">{content.lab.cards.map((card) => <article><span>{card.code}</span><div><h3>{card.title}</h3><p>{card.detail}</p></div><i>↗</i></article>)}</div>
+        </article>
+      </section>
+
+      <section class="ri-workspace ri-contact" data-ri-workspace="contact" role="tabpanel" hidden>
+        <article class="ri-window ri-contact-window">
+          <header class="ri-window-bar"><span class="ri-window-dots"><i></i><i></i><i></i></span><b>open_channel.app</b><small>secure connection</small></header>
+          <div class="ri-contact-body">
+            <div class="ri-contact-radar" aria-hidden="true"><i></i><i></i><i></i><span>Z</span></div>
+            <p>CHANNEL // 04</p><h1>{copy.message}</h1><p>{copy.messageText}</p>
+            <div><a href="mailto:arthur.aktamirov@zaroc.de">{copy.email}<span>↗</span></a><button type="button" data-ri-copy=".zaroc." data-copied={copy.copied}>Discord · .zaroc.</button></div>
+            <nav><a href="https://github.com/zaroc-dev">GitHub</a><a href="https://www.linkedin.com/in/arthur-aktamirov/">LinkedIn</a><a href="https://x.com/zaroc_dev">X</a><a href="https://instagram.com/ar_zaroc">Instagram</a></nav>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <nav class="ri-dock" aria-label={copy.applications}>
+      {[['home', '⌂', copy.overview], ['projects', '⌘', copy.projects], ['activity', '≋', copy.timeline], ['contact', '@', copy.contact]].map(([id, icon, label], index) => <button type="button" class:list={{ active: index === 0 }} data-ri-target={id}><span>{icon}</span><small>{label}</small></button>)}
+      <i></i><a href="https://github.com/zaroc-dev" target="_blank" rel="noreferrer"><span>GH</span><small>GitHub</small></a>
+    </nav>
+  </div>
+
+  <script>
+    const desktop = document.querySelector<HTMLElement>('[data-rice-desktop]');
+    if (desktop) {
+      const workspaces = [...desktop.querySelectorAll<HTMLElement>('[data-ri-workspace]')];
+      const targets = [...desktop.querySelectorAll<HTMLElement>('[data-ri-target]')];
+      const selectWorkspace = (id: string) => {
+        workspaces.forEach((workspace) => workspace.hidden = workspace.dataset.riWorkspace !== id);
+        targets.forEach((target) => {
+          const active = target.dataset.riTarget === id;
+          target.classList.toggle('active', active);
+          if (target.getAttribute('role') === 'tab') target.setAttribute('aria-selected', String(active));
+        });
+      };
+      targets.forEach((target) => target.addEventListener('click', () => selectWorkspace(target.dataset.riTarget || 'home')));
+      desktop.querySelectorAll<HTMLElement>('[data-ri-jump]').forEach((button) => button.addEventListener('click', () => selectWorkspace(button.dataset.riJump || 'home')));
+
+      const clock = () => {
+        const value = new Intl.DateTimeFormat([], { hour: '2-digit', minute: '2-digit' }).format(new Date());
+        desktop.querySelectorAll('time[data-ri-clock], time[data-ri-clock-large]').forEach((node) => node.textContent = value);
+      };
+      clock(); window.setInterval(clock, 30000);
+
+      const projectButtons = [...desktop.querySelectorAll<HTMLButtonElement>('[data-ri-project]')];
+      const projectPanels = [...desktop.querySelectorAll<HTMLElement>('[data-ri-project-panel]')];
+      projectButtons.forEach((button) => button.addEventListener('click', () => {
+        const id = button.dataset.riProject;
+        projectButtons.forEach((item) => item.classList.toggle('active', item === button));
+        projectPanels.forEach((panel) => panel.hidden = panel.dataset.riProjectPanel !== id);
+      }));
+
+      const form = desktop.querySelector<HTMLFormElement>('[data-ri-terminal]');
+      const output = desktop.querySelector<HTMLElement>('[data-ri-output]');
+      form?.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const input = form.elements.namedItem('command') as HTMLInputElement;
+        const command = input.value.trim().toLowerCase();
+        if (!output || !command) return;
+        const line = document.createElement('p');
+        line.innerHTML = `<span>zaroc@rice:~$</span> ${command}`;
+        output.append(line);
+        const response = document.createElement('p'); response.className = 'muted';
+        if (command === 'clear') output.innerHTML = '';
+        else if (command === 'help') { response.textContent = form.dataset.help || ''; output.append(response); }
+        else if (command === 'about') { response.textContent = form.dataset.about || ''; output.append(response); }
+        else if (command === 'projects') selectWorkspace('projects');
+        else if (command === 'github') window.open('https://github.com/zaroc-dev', '_blank', 'noopener');
+        else if (command === 'lang de' || command === 'lang en') window.location.href = `/${command.slice(-2)}/riceos/`;
+        else { response.textContent = form.dataset.unknown || ''; output.append(response); }
+        input.value = ''; output.scrollTop = output.scrollHeight;
+      });
+
+      desktop.querySelector<HTMLElement>('[data-ri-copy]')?.addEventListener('click', async (event) => {
+        const button = event.currentTarget as HTMLElement;
+        await navigator.clipboard.writeText(button.dataset.riCopy || '');
+        const before = button.textContent; button.textContent = button.dataset.copied || '';
+        window.setTimeout(() => button.textContent = before, 1600);
+      });
+    }
+  </script>
+</ShowcaseLayout>

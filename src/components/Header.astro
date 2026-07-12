@@ -1,0 +1,38 @@
+---
+import type { SiteContent } from '../content';
+interface Props { content: SiteContent }
+const { content } = Astro.props;
+const otherLocale = content.locale === 'en' ? 'de' : 'en';
+---
+<header class="site-header" data-header>
+  <div class="header-inner shell">
+    <a class="brand" href={`/${content.locale}/`} aria-label="ZAROC — home">
+      <span class="brand-mark" aria-hidden="true">Z</span>
+      <span class="brand-word">ZAROC<span class="cursor">_</span></span>
+    </a>
+
+    <div class="system-status">
+      <span class="status-dot" aria-hidden="true"></span>
+      <span>{content.system.online}</span>
+    </div>
+
+    <nav class="main-nav" aria-label="Primary navigation">
+      <a href="#work"><span>01</span>{content.nav.work}</a>
+      <a href="#journey"><span>02</span>{content.nav.journey}</a>
+      <a href="#lab"><span>03</span>{content.nav.lab}</a>
+      <a href="#contact"><span>04</span>{content.nav.contact}</a>
+    </nav>
+
+    <div class="header-actions">
+      <a class="locale-switch" href={`/${otherLocale}/`} lang={otherLocale} aria-label={`Switch to ${otherLocale === 'de' ? 'German' : 'English'}`}>
+        <span class:list={{ active: content.locale === 'en' }}>EN</span>
+        <i aria-hidden="true">/</i>
+        <span class:list={{ active: content.locale === 'de' }}>DE</span>
+      </a>
+      <button class="command-trigger" type="button" data-command-open aria-label={content.nav.menu}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 7 5 5-5 5M12 17h7" /></svg>
+        <span class="command-key">⌘ K</span>
+      </button>
+    </div>
+  </div>
+</header>

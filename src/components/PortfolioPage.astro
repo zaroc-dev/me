@@ -1,0 +1,27 @@
+---
+import type { SiteContent } from '../content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from './Header.astro';
+import Hero from './Hero.astro';
+import Work from './Work.astro';
+import Journey from './Journey.astro';
+import Lab from './Lab.astro';
+import Contact from './Contact.astro';
+import CommandPalette from './CommandPalette.astro';
+import DesignSwitcher from './DesignSwitcher.astro';
+interface Props { content: SiteContent }
+const { content } = Astro.props;
+---
+<BaseLayout content={content}>
+  <div id="top"></div>
+  <Header content={content} />
+  <main id="main">
+    <Hero content={content} />
+    <Work content={content} />
+    <Journey content={content} />
+    <Lab content={content} />
+    <Contact content={content} />
+  </main>
+  <CommandPalette content={content} />
+  <DesignSwitcher locale={content.locale} current="control" />
+</BaseLayout>

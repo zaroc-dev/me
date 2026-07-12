@@ -1,0 +1,327 @@
+---
+import '../styles/zarocos.css';
+import type { SiteContent } from '../content';
+import ShowcaseLayout from '../layouts/ShowcaseLayout.astro';
+import { withBase } from '../utils/paths';
+
+interface Props { content: SiteContent }
+const { content } = Astro.props;
+const other = content.locale === 'en' ? 'de' : 'en';
+const copy = content.locale === 'de'
+  ? {
+      overview: 'Über mich', projects: 'Projekte', journey: 'Werdegang', lab: 'Labor', terminal: 'Terminal', contact: 'Kontakt', settings: 'Einstellungen', monitor: 'Monitor',
+      desktop: 'Arbeitsfläche 1', available: 'Bereit für neue Quests', greeting: 'Willkommen in meinem System.',
+      intro: 'Softwareentwickler, Systemtüftler und Student der Technischen Informatik aus Baden-Württemberg.',
+      profileTitle: 'Ich baue Software, die Menschen tatsächlich benutzen können.', openProjects: 'Projekte öffnen',
+      appProjects: 'project_explorer', selected: 'Ausgewählte Deployments', inspect: 'Projekt öffnen',
+      appJourney: 'activity.log', journeySub: 'Der Pfad vom ersten PC bis heute.', appLab: 'side_quests',
+      terminalHint: '„help“ eingeben, um alle Befehle zu sehen.', contactTitle: 'Verbindung herstellen.',
+      contactText: 'Für spannende Projekte, Kollaborationen und angenehm nerdige Gespräche.', email: 'E-Mail schreiben', copyDiscord: 'Discord kopieren', copied: 'Kopiert!',
+      appearance: 'Erscheinungsbild', accent: 'Akzentfarbe', wallpaper: 'Hintergrund', layout: 'Fensterverwaltung', reset: 'Desktop zurücksetzen', resetNote: 'Löscht gespeicherte Fensterpositionen und Größen.',
+      system: 'Systemmonitor', nominal: 'Alle Systeme nominal', local: 'Lokale Zeit', session: 'Sitzung', apps: 'Apps', memory: 'Neugier', uptime: 'Laufzeit',
+      close: 'Fenster schließen', minimize: 'Fenster minimieren', maximize: 'Fenster maximieren', resize: 'Fenstergröße ändern',
+      help: 'help · apps · open <app> · close <app> · projects · github · whoami · clear · reset',
+      unknown: 'Befehl nicht gefunden. „help“ zeigt alle verfügbaren Befehle.', whoami: 'Arthur “ZAROC” Aktamirov — Softwareentwickler, Student und Linux-Enthusiast.',
+      restored: 'Desktop-Sitzung wiederhergestellt.', resetDone: 'Desktop-Layout wurde zurückgesetzt.', appsList: 'about, projects, journey, lab, terminal, contact, settings, monitor',
+      more: 'Mehr', allProjects: 'Alle Projekte', appDrawer: 'Apps & Werkzeuge', closeDrawer: 'App-Menü schließen',
+    }
+  : {
+      overview: 'About me', projects: 'Projects', journey: 'Journey', lab: 'Lab', terminal: 'Terminal', contact: 'Contact', settings: 'Settings', monitor: 'Monitor',
+      desktop: 'Workspace 1', available: 'Ready for new quests', greeting: 'Welcome to my system.',
+      intro: 'Software engineer, systems tinkerer, and technical computer science student based in Baden-Württemberg.',
+      profileTitle: 'I build software that people can actually use.', openProjects: 'Open projects',
+      appProjects: 'project_explorer', selected: 'Selected deployments', inspect: 'Open project',
+      appJourney: 'activity.log', journeySub: 'The path from a first PC to today.', appLab: 'side_quests',
+      terminalHint: 'Type “help” to discover available commands.', contactTitle: 'Establish a connection.',
+      contactText: 'For interesting projects, collaborations, and pleasantly nerdy conversations.', email: 'Write an email', copyDiscord: 'Copy Discord', copied: 'Copied!',
+      appearance: 'Appearance', accent: 'Accent color', wallpaper: 'Wallpaper', layout: 'Window management', reset: 'Reset desktop', resetNote: 'Clears saved window positions and sizes.',
+      system: 'System monitor', nominal: 'All systems nominal', local: 'Local time', session: 'Session', apps: 'Apps', memory: 'Curiosity', uptime: 'Uptime',
+      close: 'Close window', minimize: 'Minimize window', maximize: 'Maximize window', resize: 'Resize window',
+      help: 'help · apps · open <app> · close <app> · projects · github · whoami · clear · reset',
+      unknown: 'command not found. “help” lists all available commands.', whoami: 'Arthur “ZAROC” Aktamirov — software engineer, student, and Linux enthusiast.',
+      restored: 'Desktop session restored.', resetDone: 'Desktop layout has been reset.', appsList: 'about, projects, journey, lab, terminal, contact, settings, monitor',
+      more: 'More', allProjects: 'All projects', appDrawer: 'Apps & tools', closeDrawer: 'Close app menu',
+    };
+
+const apps = [
+  { id: 'about', icon: 'ZA', label: copy.overview },
+  { id: 'projects', icon: '⌘', label: copy.projects },
+  { id: 'journey', icon: '≋', label: copy.journey },
+  { id: 'lab', icon: '✦', label: copy.lab },
+  { id: 'terminal', icon: '>_', label: copy.terminal },
+  { id: 'contact', icon: '@', label: copy.contact },
+  { id: 'monitor', icon: '◉', label: copy.monitor },
+  { id: 'settings', icon: '⚙', label: copy.settings },
+];
+---
+<ShowcaseLayout content={content} design="zarocos" designTitle="ZAROC OS">
+  <div
+    class="zo-os wallpaper-grid"
+    data-zo-os
+    data-locale={content.locale}
+    data-help={copy.help}
+    data-unknown={copy.unknown}
+    data-whoami={copy.whoami}
+    data-apps={copy.appsList}
+    data-restored={copy.restored}
+    data-reset={copy.resetDone}
+  >
+    <header class="zo-bar">
+      <button class="zo-launcher" type="button" data-zo-open="about"><span>Z</span><b>ZAROC OS</b></button>
+      <div class="zo-tray">
+        <span class="zo-palette"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+        <span>⌁</span><span>◉</span><time data-zo-clock>00:00</time>
+        <a href={withBase(`/${other}/`)} lang={other}>{other.toUpperCase()}</a>
+      </div>
+    </header>
+
+    <div class="zo-wallpaper" aria-hidden="true">
+      <div class="zo-grid"></div><div class="zo-aurora one"></div><div class="zo-aurora two"></div>
+      <div class="zo-orbit"><i></i><i></i><i></i></div>
+      <p>ZAROC</p><span>PERSONAL OPERATING ENVIRONMENT // BUILD 2026.07</span>
+      <svg viewBox="0 0 1600 900" preserveAspectRatio="none"><path d="M0 690 220 505l145 110 215-280 204 282 176-164 221 240 207-292 212 218"/><path d="M0 770 260 610l140 91 204-190 198 177 197-102 211 133 191-155 199 100"/></svg>
+    </div>
+
+    <main id="variant-main" class="zo-canvas" data-zo-canvas>
+      <article class="zo-window zo-about" data-zo-window="about" style="--x:3%;--y:5%;--w:740px;--h:650px;--z:3">
+        <header class="zo-titlebar" data-zo-drag>
+          <div class="zo-window-actions">
+            <button type="button" class="close" data-zo-action="close" aria-label={copy.close}></button>
+            <button type="button" class="minimize" data-zo-action="minimize" aria-label={copy.minimize}></button>
+            <button type="button" class="maximize" data-zo-action="maximize" aria-label={copy.maximize}></button>
+          </div>
+          <b>about_me.md</b><span>~/home/zaroc</span>
+        </header>
+        <div class="zo-window-content zo-about-content">
+          <div class="zo-about-top">
+            <div class="zo-avatar"><span>ZA</span><i></i><small>ONLINE</small></div>
+            <div><p class="zo-code">// {copy.greeting}</p><h1>Arthur <em>“ZAROC”</em><br />Aktamirov</h1><p>{copy.intro}</p></div>
+          </div>
+          <h2>{copy.profileTitle}</h2>
+          <div class="zo-stats">{content.stats.map((stat) => <div><strong>{stat.value}</strong><span>{stat.label}</span></div>)}</div>
+          <button class="zo-primary" type="button" data-zo-open="projects"><span>{copy.openProjects}</span><b>→</b></button>
+        </div>
+        <button class="zo-resize nw" type="button" data-zo-resize="nw" aria-label={copy.resize}></button><button class="zo-resize ne" type="button" data-zo-resize="ne" aria-label={copy.resize}></button><button class="zo-resize sw" type="button" data-zo-resize="sw" aria-label={copy.resize}></button><button class="zo-resize se" type="button" data-zo-resize="se" aria-label={copy.resize}></button>
+      </article>
+
+      <article class="zo-window zo-projects" data-zo-window="projects" style="--x:18%;--y:6%;--w:980px;--h:720px;--z:2" hidden>
+        <header class="zo-titlebar" data-zo-drag><div class="zo-window-actions"><button type="button" class="close" data-zo-action="close" aria-label={copy.close}></button><button type="button" class="minimize" data-zo-action="minimize" aria-label={copy.minimize}></button><button type="button" class="maximize" data-zo-action="maximize" aria-label={copy.maximize}></button></div><b>{copy.appProjects}</b><span>~/{copy.selected}</span></header>
+        <div class="zo-window-content zo-project-content">
+          <aside><header class="zo-project-nav-head"><span>PROJECTS</span><b>{content.work.projects.length.toString().padStart(2, '0')} DEPLOYMENTS</b></header>{content.work.projects.map((project, index) => <button type="button" class:list={{ active: index === 0 }} data-zo-project={project.id}><span>{project.index}</span><b>{project.title}</b><small>{project.status}</small><i aria-hidden="true">›</i></button>)}</aside>
+          <div class="zo-project-panels"><button class="zo-mobile-back" type="button" data-zo-project-back><span>‹</span>{copy.allProjects}</button>{content.work.projects.map((project, index) => <article data-zo-project-panel={project.id} hidden={index !== 0}><div class="zo-project-meta"><span>PROJECT::{project.index}</span><i>{project.status}</i></div><div class="zo-project-hero"><span>{project.title.slice(0, 2).toUpperCase()}</span><div><small>SELECTED DEPLOYMENT</small><h2>{project.title}</h2></div></div><p>{project.description}</p>{project.metric && <div class="zo-project-metric"><strong>{project.metric}</strong><span>{project.metricLabel}</span></div>}<dl class="zo-project-facts"><div><dt>TYPE</dt><dd>{project.tags[0]}</dd></div><div><dt>STATE</dt><dd>{project.status}</dd></div><div><dt>INDEX</dt><dd>/{project.index}</dd></div></dl><ul>{project.tags.map((tag) => <li>{tag}</li>)}</ul><div class="zo-project-links">{project.href && <a class="zo-primary" href={project.href} target="_blank" rel="noreferrer"><span>{copy.inspect}</span><b>↗</b></a>}{project.repoHref && <a class="zo-project-repo" href={project.repoHref} target="_blank" rel="noreferrer"><span>GitHub</span><b>↗</b></a>}</div><div class="zo-project-emblem" aria-hidden="true"><span>{project.title.slice(0, 2).toUpperCase()}</span><i></i></div></article>)}</div>
+        </div>
+        <button class="zo-resize nw" type="button" data-zo-resize="nw" aria-label={copy.resize}></button><button class="zo-resize ne" type="button" data-zo-resize="ne" aria-label={copy.resize}></button><button class="zo-resize sw" type="button" data-zo-resize="sw" aria-label={copy.resize}></button><button class="zo-resize se" type="button" data-zo-resize="se" aria-label={copy.resize}></button>
+      </article>
+
+      <article class="zo-window zo-journey" data-zo-window="journey" style="--x:8%;--y:10%;--w:760px;--h:690px;--z:2" hidden>
+        <header class="zo-titlebar" data-zo-drag><div class="zo-window-actions"><button type="button" class="close" data-zo-action="close" aria-label={copy.close}></button><button type="button" class="minimize" data-zo-action="minimize" aria-label={copy.minimize}></button><button type="button" class="maximize" data-zo-action="maximize" aria-label={copy.maximize}></button></div><b>{copy.appJourney}</b><span>tail -f career.log</span></header>
+        <div class="zo-window-content zo-journey-content"><header><span>ACTIVITY // 02</span><h2>{content.journey.title}</h2><p>{copy.journeySub}</p></header><div class="zo-timeline">{content.journey.items.map((item, index) => <article><time>{item.date}</time><i></i><div><small>EVENT/{String(index + 1).padStart(2, '0')}</small><h3>{item.title}</h3>{item.place && <b>{item.place}</b>}<p>{item.description}</p></div></article>)}</div></div>
+        <button class="zo-resize nw" type="button" data-zo-resize="nw" aria-label={copy.resize}></button><button class="zo-resize ne" type="button" data-zo-resize="ne" aria-label={copy.resize}></button><button class="zo-resize sw" type="button" data-zo-resize="sw" aria-label={copy.resize}></button><button class="zo-resize se" type="button" data-zo-resize="se" aria-label={copy.resize}></button>
+      </article>
+
+      <article class="zo-window zo-lab" data-zo-window="lab" style="--x:30%;--y:7%;--w:820px;--h:610px;--z:2" hidden>
+        <header class="zo-titlebar" data-zo-drag><div class="zo-window-actions"><button type="button" class="close" data-zo-action="close" aria-label={copy.close}></button><button type="button" class="minimize" data-zo-action="minimize" aria-label={copy.minimize}></button><button type="button" class="maximize" data-zo-action="maximize" aria-label={copy.maximize}></button></div><b>{copy.appLab}</b><span>~/off_the_main_thread</span></header>
+        <div class="zo-window-content zo-lab-content"><header><span>LAB // 03</span><h2>{content.lab.title}</h2><p>{content.lab.intro}</p></header><div class="zo-lab-grid">{content.lab.cards.map((card) => <article><span>{card.code}</span><i aria-hidden="true">✦</i><h3>{card.title}</h3><p>{card.description}</p><small>{card.detail}</small></article>)}</div><blockquote>“{content.lab.quote}”</blockquote></div>
+        <button class="zo-resize nw" type="button" data-zo-resize="nw" aria-label={copy.resize}></button><button class="zo-resize ne" type="button" data-zo-resize="ne" aria-label={copy.resize}></button><button class="zo-resize sw" type="button" data-zo-resize="sw" aria-label={copy.resize}></button><button class="zo-resize se" type="button" data-zo-resize="se" aria-label={copy.resize}></button>
+      </article>
+
+      <article class="zo-window zo-terminal" data-zo-window="terminal" style="--x:31%;--y:7%;--w:980px;--h:720px;--z:4" hidden>
+        <header class="zo-titlebar" data-zo-drag><div class="zo-window-actions"><button type="button" class="close" data-zo-action="close" aria-label={copy.close}></button><button type="button" class="minimize" data-zo-action="minimize" aria-label={copy.minimize}></button><button type="button" class="maximize" data-zo-action="maximize" aria-label={copy.maximize}></button></div><b>terminal — zsh</b><span>100×32</span></header>
+        <div class="zo-window-content zo-terminal-content"><div class="zo-fastfetch"><div class="zo-fetch-visual" aria-hidden="true"><div class="zo-fetch-moon"></div><svg viewBox="0 0 240 290"><path d="M29 240 75 165l35 24 31-83 42 65 31-28 20 97Z"/><path d="m63 230 38-58 25 28 31-56 39 86"/><circle cx="117" cy="138" r="28"/><path d="m101 141 16-45 18 45-18 31-16-31Z"/></svg><strong>Z</strong><small>NIX // ZAROC</small></div><div class="zo-fetch-data"><dl><div><dt>▣ Chassis</dt><dd>Desktop</dd></div><div><dt>⌁ OS</dt><dd>NixOS</dd></div><div><dt>⌛ Kernel</dt><dd>7.1.3</dd></div><div><dt>◈ Packages</dt><dd>2187 (nix-system), 502 (nix-user)</dd></div><div><dt>▣ Display</dt><dd>1920×1080 @ 144Hz [External]</dd></div><div><dt>▣ Display</dt><dd>1920×1080 @ 75Hz [External]</dd></div><div><dt>⌁ Terminal</dt><dd>kitty 0.47.4</dd></div><div><dt>◖ WM</dt><dd>niri</dd></div></dl><div class="zo-fetch-rule"></div><p>♙ <span>arthur</span> @ zaroc</p><div class="zo-fetch-rule"></div><dl><div><dt>⚙ CPU</dt><dd>13th Gen Intel Core i5-13500</dd></div><div><dt>⌁ GPU</dt><dd>NVIDIA GeForce RTX 4070</dd></div><div><dt>▣ GPU Driver</dt><dd>nvidia 595.84</dd></div><div><dt>▥ Memory</dt><dd>21.19 GiB / 31.10 GiB <b>(68%)</b></dd></div><div><dt>⌛ OS Age</dt><dd>25 days</dd></div><div><dt>♨ Uptime</dt><dd>2 hours, 39 mins</dd></div></dl><div class="zo-fetch-colors"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div></div><div class="zo-terminal-output" data-zo-output><p><span>system</span> {copy.nominal}</p><p class="muted">{copy.terminalHint}</p></div><form data-zo-terminal><label for={`zo-command-${content.locale}`}><span>zaroc@desktop</span>:<b>~</b>$</label><input id={`zo-command-${content.locale}`} name="command" autocomplete="off" spellcheck="false" /></form></div>
+        <button class="zo-resize nw" type="button" data-zo-resize="nw" aria-label={copy.resize}></button><button class="zo-resize ne" type="button" data-zo-resize="ne" aria-label={copy.resize}></button><button class="zo-resize sw" type="button" data-zo-resize="sw" aria-label={copy.resize}></button><button class="zo-resize se" type="button" data-zo-resize="se" aria-label={copy.resize}></button>
+      </article>
+
+      <article class="zo-window zo-contact" data-zo-window="contact" style="--x:25%;--y:11%;--w:720px;--h:600px;--z:2" hidden>
+        <header class="zo-titlebar" data-zo-drag><div class="zo-window-actions"><button type="button" class="close" data-zo-action="close" aria-label={copy.close}></button><button type="button" class="minimize" data-zo-action="minimize" aria-label={copy.minimize}></button><button type="button" class="maximize" data-zo-action="maximize" aria-label={copy.maximize}></button></div><b>open_channel.app</b><span>TLS / secure</span></header>
+        <div class="zo-window-content zo-contact-content"><div class="zo-radar" aria-hidden="true"><span>Z</span><i></i><i></i><i></i></div><span>CHANNEL // 04</span><h2>{copy.contactTitle}</h2><p>{copy.contactText}</p><div class="zo-contact-actions"><a class="zo-primary" href="mailto:arthur.aktamirov@zaroc.de"><span>{copy.email}</span><b>↗</b></a><button type="button" data-zo-copy=".zaroc." data-copied={copy.copied}>{copy.copyDiscord}</button></div><nav><a href="https://github.com/zaroc-dev">GitHub ↗</a><a href="https://www.linkedin.com/in/arthur-aktamirov/">LinkedIn ↗</a><a href="https://x.com/zaroc_dev">X ↗</a><a href="https://instagram.com/ar_zaroc">Instagram ↗</a></nav></div>
+        <button class="zo-resize nw" type="button" data-zo-resize="nw" aria-label={copy.resize}></button><button class="zo-resize ne" type="button" data-zo-resize="ne" aria-label={copy.resize}></button><button class="zo-resize sw" type="button" data-zo-resize="sw" aria-label={copy.resize}></button><button class="zo-resize se" type="button" data-zo-resize="se" aria-label={copy.resize}></button>
+      </article>
+
+      <article class="zo-window zo-monitor" data-zo-window="monitor" style="--x:77%;--y:7%;--w:310px;--h:390px;--z:2">
+        <header class="zo-titlebar" data-zo-drag><div class="zo-window-actions"><button type="button" class="close" data-zo-action="close" aria-label={copy.close}></button><button type="button" class="minimize" data-zo-action="minimize" aria-label={copy.minimize}></button><button type="button" class="maximize" data-zo-action="maximize" aria-label={copy.maximize}></button></div><b>system.monitor</b><span>live</span></header>
+        <div class="zo-window-content zo-monitor-content"><div class="zo-monitor-head"><i></i><div><strong>{copy.nominal}</strong><span>STATUS / ONLINE</span></div></div><dl><div><dt>{copy.local}</dt><dd><time data-zo-clock-large>00:00</time></dd></div><div><dt>{copy.session}</dt><dd>zaroc@home</dd></div><div><dt>{copy.apps}</dt><dd data-zo-running>2 / 8</dd></div><div><dt>{copy.memory}</dt><dd>87%</dd></div><div><dt>{copy.uptime}</dt><dd>∞</dd></div></dl><div class="zo-bars" aria-hidden="true">{Array.from({ length: 18 }).map((_, index) => <i style={`--v:${25 + ((index * 37) % 70)}%`}></i>)}</div></div>
+        <button class="zo-resize nw" type="button" data-zo-resize="nw" aria-label={copy.resize}></button><button class="zo-resize ne" type="button" data-zo-resize="ne" aria-label={copy.resize}></button><button class="zo-resize sw" type="button" data-zo-resize="sw" aria-label={copy.resize}></button><button class="zo-resize se" type="button" data-zo-resize="se" aria-label={copy.resize}></button>
+      </article>
+
+      <article class="zo-window zo-settings" data-zo-window="settings" style="--x:58%;--y:8%;--w:520px;--h:560px;--z:2" hidden>
+        <header class="zo-titlebar" data-zo-drag><div class="zo-window-actions"><button type="button" class="close" data-zo-action="close" aria-label={copy.close}></button><button type="button" class="minimize" data-zo-action="minimize" aria-label={copy.minimize}></button><button type="button" class="maximize" data-zo-action="maximize" aria-label={copy.maximize}></button></div><b>settings.app</b><span>ZAROC OS</span></header>
+        <div class="zo-window-content zo-settings-content"><header><span>⚙</span><div><h2>{copy.appearance}</h2><p>ZAROC OS // build 5.0</p></div></header><section><h3>{copy.accent}</h3><div class="zo-swatches"><button type="button" data-zo-accent="#8aadf4" style="--swatch:#8aadf4" aria-label="Blue"></button><button type="button" data-zo-accent="#91d7e3" style="--swatch:#91d7e3" aria-label="Sky"></button><button type="button" data-zo-accent="#b7bdf8" style="--swatch:#b7bdf8" aria-label="Lavender"></button><button type="button" data-zo-accent="#8bd5ca" style="--swatch:#8bd5ca" aria-label="Teal"></button><button type="button" data-zo-accent="#ee99a0" style="--swatch:#ee99a0" aria-label="Salmon"></button></div></section><section><h3>{copy.wallpaper}</h3><div class="zo-wallpaper-options"><button type="button" data-zo-wallpaper="grid"><i></i><span>Grid</span></button><button type="button" data-zo-wallpaper="void"><i></i><span>Void</span></button><button type="button" data-zo-wallpaper="aurora"><i></i><span>Aurora</span></button></div></section><section><h3>{copy.layout}</h3><p>{copy.resetNote}</p><button class="zo-reset" type="button" data-zo-reset>{copy.reset}<span>↻</span></button></section></div>
+        <button class="zo-resize nw" type="button" data-zo-resize="nw" aria-label={copy.resize}></button><button class="zo-resize ne" type="button" data-zo-resize="ne" aria-label={copy.resize}></button><button class="zo-resize sw" type="button" data-zo-resize="sw" aria-label={copy.resize}></button><button class="zo-resize se" type="button" data-zo-resize="se" aria-label={copy.resize}></button>
+      </article>
+    </main>
+
+    <nav class="zo-dock" aria-label="Applications">
+      {apps.map((app) => <button type="button" class:list={{ running: app.id === 'about' || app.id === 'monitor' }} data-zo-open={app.id}><span>{app.icon}</span><small>{app.label}</small><i></i></button>)}
+    </nav>
+    <nav class="zo-mobile-nav" aria-label="Primary applications">
+      <button type="button" data-zo-open="about"><span>ZA</span><small>{copy.overview}</small></button>
+      <button type="button" data-zo-open="projects"><span>⌘</span><small>{copy.projects}</small></button>
+      <button type="button" data-zo-mobile-more><span>•••</span><small>{copy.more}</small></button>
+      <button type="button" data-zo-open="contact"><span>@</span><small>{copy.contact}</small></button>
+    </nav>
+    <div class="zo-mobile-sheet" data-zo-sheet hidden>
+      <button class="zo-sheet-backdrop" type="button" data-zo-sheet-close aria-label={copy.closeDrawer}></button>
+      <section><header><div><span>APP DRAWER</span><h2>{copy.appDrawer}</h2></div><button type="button" data-zo-sheet-close aria-label={copy.closeDrawer}>×</button></header><div>{apps.filter((app) => !['about', 'projects', 'contact'].includes(app.id)).map((app) => <button type="button" data-zo-open={app.id}><span>{app.icon}</span><b>{app.label}</b><i>›</i></button>)}</div></section>
+    </div>
+    <div class="zo-toast" data-zo-toast role="status"></div>
+  </div>
+
+  <script>
+    const os = document.querySelector<HTMLElement>('[data-zo-os]');
+    if (os) {
+      const canvas = os.querySelector<HTMLElement>('[data-zo-canvas]')!;
+      const windows = [...os.querySelectorAll<HTMLElement>('[data-zo-window]')];
+      const dockButtons = [...os.querySelectorAll<HTMLButtonElement>('.zo-dock [data-zo-open]')];
+      const toast = os.querySelector<HTMLElement>('[data-zo-toast]');
+      const mobileSheet = os.querySelector<HTMLElement>('[data-zo-sheet]');
+      const storageKey = `zaroc-os-layout-v1-${os.dataset.locale}`;
+      let topZ = 10;
+      const isMobile = () => window.matchMedia('(max-width: 800px)').matches;
+
+      const notify = (message: string) => {
+        if (!toast) return;
+        toast.textContent = message; toast.classList.add('show');
+        window.setTimeout(() => toast.classList.remove('show'), 1800);
+      };
+      const updateRunning = () => {
+        const open = windows.filter((item) => !item.hidden || item.dataset.zoMinimized === 'true').map((item) => item.dataset.zoWindow);
+        dockButtons.forEach((button) => button.classList.toggle('running', open.includes(button.dataset.zoOpen)));
+        const counter = os.querySelector('[data-zo-running]'); if (counter) counter.textContent = `${open.length} / ${windows.length}`;
+      };
+      const focusWindow = (windowEl: HTMLElement) => {
+        topZ += 1; windowEl.style.zIndex = String(topZ);
+        windows.forEach((item) => item.classList.toggle('is-focused', item === windowEl));
+      };
+      const saveLayout = () => {
+        if (isMobile()) return;
+        const state = Object.fromEntries(windows.map((item) => [item.dataset.zoWindow, {
+          left: item.style.left, top: item.style.top, width: item.style.width, height: item.style.height,
+          hidden: item.hidden, minimized: item.dataset.zoMinimized === 'true', z: item.style.zIndex,
+          maximized: item.classList.contains('is-maximized'), previous: item.dataset.previous,
+        }]));
+        localStorage.setItem(storageKey, JSON.stringify({ state, accent: os.style.getPropertyValue('--zo-accent'), wallpaper: [...os.classList].find((name) => name.startsWith('wallpaper-')) }));
+      };
+      const openWindow = (id: string) => {
+        const target = windows.find((item) => item.dataset.zoWindow === id); if (!target) return;
+        if (isMobile()) windows.forEach((item) => item.hidden = item !== target);
+        if (mobileSheet) mobileSheet.hidden = true;
+        target.hidden = false; target.dataset.zoMinimized = 'false'; target.classList.add('zo-pop'); focusWindow(target);
+        window.setTimeout(() => target.classList.remove('zo-pop'), 260); updateRunning(); saveLayout();
+      };
+      const closeWindow = (windowEl: HTMLElement, minimized = false) => { windowEl.hidden = true; windowEl.dataset.zoMinimized = String(minimized); updateRunning(); saveLayout(); };
+      const toggleMaximize = (windowEl: HTMLElement) => {
+        if (isMobile()) return;
+        if (windowEl.classList.contains('is-maximized')) {
+          const previous = JSON.parse(windowEl.dataset.previous || '{}');
+          Object.assign(windowEl.style, previous); windowEl.classList.remove('is-maximized');
+        } else {
+          windowEl.dataset.previous = JSON.stringify({ left: windowEl.style.left, top: windowEl.style.top, width: windowEl.style.width, height: windowEl.style.height });
+          Object.assign(windowEl.style, { left: '10px', top: '10px', width: `${canvas.clientWidth - 20}px`, height: `${canvas.clientHeight - 20}px` });
+          windowEl.classList.add('is-maximized'); focusWindow(windowEl);
+        }
+        saveLayout();
+      };
+
+      dockButtons.forEach((button) => button.addEventListener('click', () => openWindow(button.dataset.zoOpen || 'about')));
+      os.querySelectorAll<HTMLElement>('[data-zo-open]').forEach((button) => {
+        if (!button.closest('.zo-dock')) button.addEventListener('click', () => openWindow(button.dataset.zoOpen || 'about'));
+      });
+      windows.forEach((windowEl) => {
+        windowEl.addEventListener('pointerdown', () => focusWindow(windowEl));
+        windowEl.querySelector('[data-zo-action="close"]')?.addEventListener('click', () => closeWindow(windowEl));
+        windowEl.querySelector('[data-zo-action="minimize"]')?.addEventListener('click', () => closeWindow(windowEl, true));
+        windowEl.querySelector('[data-zo-action="maximize"]')?.addEventListener('click', () => toggleMaximize(windowEl));
+        const bar = windowEl.querySelector<HTMLElement>('[data-zo-drag]');
+        bar?.addEventListener('dblclick', (event) => { if (!(event.target as HTMLElement).closest('button')) toggleMaximize(windowEl); });
+        bar?.addEventListener('pointerdown', (event) => {
+          if (isMobile() || (event.target as HTMLElement).closest('button') || windowEl.classList.contains('is-maximized')) return;
+          event.preventDefault(); focusWindow(windowEl);
+          const canvasRect = canvas.getBoundingClientRect(); const rect = windowEl.getBoundingClientRect();
+          const startX = event.clientX; const startY = event.clientY; const left = rect.left - canvasRect.left; const top = rect.top - canvasRect.top;
+          bar.setPointerCapture(event.pointerId); windowEl.classList.add('is-moving');
+          const move = (next: PointerEvent) => {
+            const x = Math.max(0, Math.min(canvas.clientWidth - 180, left + next.clientX - startX));
+            const y = Math.max(0, Math.min(canvas.clientHeight - 44, top + next.clientY - startY));
+            windowEl.style.left = `${x}px`; windowEl.style.top = `${y}px`;
+          };
+          const end = () => { windowEl.classList.remove('is-moving'); bar.removeEventListener('pointermove', move); saveLayout(); };
+          bar.addEventListener('pointermove', move); bar.addEventListener('pointerup', end, { once: true }); bar.addEventListener('pointercancel', end, { once: true });
+        });
+        windowEl.querySelectorAll<HTMLElement>('[data-zo-resize]').forEach((handle) => handle.addEventListener('pointerdown', (event) => {
+          if (isMobile() || windowEl.classList.contains('is-maximized')) return;
+          event.preventDefault(); event.stopPropagation(); focusWindow(windowEl);
+          const canvasRect = canvas.getBoundingClientRect(); const rect = windowEl.getBoundingClientRect(); const direction = handle.dataset.zoResize || 'se';
+          const startX = event.clientX; const startY = event.clientY; const start = { x: rect.left - canvasRect.left, y: rect.top - canvasRect.top, w: rect.width, h: rect.height };
+          handle.setPointerCapture(event.pointerId); windowEl.classList.add('is-resizing');
+          const move = (next: PointerEvent) => {
+            const dx = next.clientX - startX; const dy = next.clientY - startY; let { x, y, w, h } = start;
+            if (direction.includes('e')) w = Math.max(380, Math.min(canvas.clientWidth - x, start.w + dx));
+            if (direction.includes('s')) h = Math.max(280, Math.min(canvas.clientHeight - y, start.h + dy));
+            if (direction.includes('w')) { const nextW = Math.max(380, start.w - dx); x = Math.max(0, start.x + start.w - nextW); w = start.x + start.w - x; }
+            if (direction.includes('n')) { const nextH = Math.max(280, start.h - dy); y = Math.max(0, start.y + start.h - nextH); h = start.y + start.h - y; }
+            Object.assign(windowEl.style, { left: `${x}px`, top: `${y}px`, width: `${w}px`, height: `${h}px` });
+          };
+          const end = () => { windowEl.classList.remove('is-resizing'); handle.removeEventListener('pointermove', move); saveLayout(); };
+          handle.addEventListener('pointermove', move); handle.addEventListener('pointerup', end, { once: true }); handle.addEventListener('pointercancel', end, { once: true });
+        }));
+      });
+
+      const projectButtons = [...os.querySelectorAll<HTMLButtonElement>('[data-zo-project]')];
+      const projectPanels = [...os.querySelectorAll<HTMLElement>('[data-zo-project-panel]')];
+      projectButtons.forEach((button) => button.addEventListener('click', () => {
+        projectButtons.forEach((item) => item.classList.toggle('active', item === button));
+        projectPanels.forEach((panel) => panel.hidden = panel.dataset.zoProjectPanel !== button.dataset.zoProject);
+        if (isMobile()) button.closest('.zo-project-content')?.classList.add('show-detail');
+      }));
+      os.querySelector('[data-zo-project-back]')?.addEventListener('click', () => os.querySelector('.zo-project-content')?.classList.remove('show-detail'));
+      os.querySelector('[data-zo-mobile-more]')?.addEventListener('click', () => { if (mobileSheet) mobileSheet.hidden = false; });
+      os.querySelectorAll('[data-zo-sheet-close]').forEach((button) => button.addEventListener('click', () => { if (mobileSheet) mobileSheet.hidden = true; }));
+
+      os.querySelector<HTMLElement>('[data-zo-copy]')?.addEventListener('click', async (event) => {
+        const button = event.currentTarget as HTMLElement; await navigator.clipboard.writeText(button.dataset.zoCopy || '');
+        const original = button.textContent; button.textContent = button.dataset.copied || ''; window.setTimeout(() => button.textContent = original, 1600);
+      });
+      os.querySelectorAll<HTMLElement>('[data-zo-accent]').forEach((button) => button.addEventListener('click', () => {
+        os.style.setProperty('--zo-accent', button.dataset.zoAccent || '#8aadf4'); saveLayout();
+      }));
+      os.querySelectorAll<HTMLElement>('[data-zo-wallpaper]').forEach((button) => button.addEventListener('click', () => {
+        [...os.classList].filter((name) => name.startsWith('wallpaper-')).forEach((name) => os.classList.remove(name));
+        os.classList.add(`wallpaper-${button.dataset.zoWallpaper}`); saveLayout();
+      }));
+      const reset = () => { localStorage.removeItem(storageKey); notify(os.dataset.reset || 'Reset'); window.setTimeout(() => location.reload(), 500); };
+      os.querySelector('[data-zo-reset]')?.addEventListener('click', reset);
+
+      const output = os.querySelector<HTMLElement>('[data-zo-output]'); const terminal = os.querySelector<HTMLFormElement>('[data-zo-terminal]');
+      const print = (value: string, muted = true) => { if (!output) return; const line = document.createElement('p'); line.className = muted ? 'muted' : ''; line.textContent = value; output.append(line); output.scrollTop = output.scrollHeight; };
+      terminal?.addEventListener('submit', (event) => {
+        event.preventDefault(); const input = terminal.elements.namedItem('command') as HTMLInputElement; const raw = input.value.trim(); const command = raw.toLowerCase(); if (!command) return;
+        print(`zaroc@desktop:~$ ${raw}`, false); input.value = '';
+        if (command === 'clear') output!.innerHTML = '';
+        else if (command === 'help') print(os.dataset.help || '');
+        else if (command === 'apps') print(os.dataset.apps || '');
+        else if (command === 'whoami') print(os.dataset.whoami || '');
+        else if (command === 'projects') openWindow('projects');
+        else if (command === 'github') window.open('https://github.com/zaroc-dev', '_blank', 'noopener');
+        else if (command === 'reset') reset();
+        else if (command.startsWith('open ')) { const id = command.slice(5); if (windows.some((item) => item.dataset.zoWindow === id)) openWindow(id); else print(os.dataset.unknown || ''); }
+        else if (command.startsWith('close ')) { const target = windows.find((item) => item.dataset.zoWindow === command.slice(6)); target ? closeWindow(target) : print(os.dataset.unknown || ''); }
+        else print(os.dataset.unknown || '');
+      });
+
+      const updateClock = () => { const value = new Intl.DateTimeFormat([], { hour: '2-digit', minute: '2-digit' }).format(new Date()); os.querySelectorAll('[data-zo-clock], [data-zo-clock-large]').forEach((node) => node.textContent = value); };
+      updateClock(); window.setInterval(updateClock, 30000);
+
+      if (isMobile()) { windows.forEach((item) => item.hidden = item.dataset.zoWindow !== 'about'); }
+      else {
+        try {
+          const saved = JSON.parse(localStorage.getItem(storageKey) || 'null');
+          if (saved?.state) windows.forEach((item) => { const state = saved.state[item.dataset.zoWindow!]; if (!state) return; Object.assign(item.style, { left: state.left, top: state.top, width: state.width, height: state.height, zIndex: state.z }); item.hidden = state.hidden; item.dataset.zoMinimized = String(Boolean(state.minimized)); if (state.maximized) item.classList.add('is-maximized'); if (state.previous) item.dataset.previous = state.previous; });
+          if (saved?.accent) os.style.setProperty('--zo-accent', saved.accent);
+          if (saved?.wallpaper) { [...os.classList].filter((name) => name.startsWith('wallpaper-')).forEach((name) => os.classList.remove(name)); os.classList.add(saved.wallpaper); }
+          if (saved) notify(os.dataset.restored || 'Restored');
+        } catch { localStorage.removeItem(storageKey); }
+      }
+      updateRunning(); const firstOpen = windows.find((item) => !item.hidden); if (firstOpen) focusWindow(firstOpen);
+    }
+  </script>
+</ShowcaseLayout>

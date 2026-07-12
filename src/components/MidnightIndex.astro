@@ -1,0 +1,105 @@
+---
+import type { SiteContent } from '../content';
+import ShowcaseLayout from '../layouts/ShowcaseLayout.astro';
+interface Props { content: SiteContent }
+const { content } = Astro.props;
+const other = content.locale === 'en' ? 'de' : 'en';
+const copy = content.locale === 'de'
+  ? {
+      archive: 'Persönliches Archiv', issue: 'Ausgabe 2026.07', intro: 'Softwareentwickler, Systemtüftler und Student der Technischen Informatik.',
+      statement: 'Ich entwerfe Software, die komplizierte Systeme ruhig, nützlich und verständlich macht.',
+      index: 'Projektindex', selected: 'Ausgewählte Arbeiten', read: 'Ansehen', practice: 'Praxis & Studium',
+      profile: 'Profilnotizen', availability: 'Verfügbar für ausgewählte Projekte', contact: 'Kontakt aufnehmen',
+      colophon: 'Gesetzt in Manrope und IBM Plex Mono. Gebaut mit Astro.',
+    }
+  : {
+      archive: 'Personal archive', issue: 'Issue 2026.07', intro: 'Software engineer, systems tinkerer, and technical computer science student.',
+      statement: 'I design software that makes complicated systems feel calm, useful, and understandable.',
+      index: 'Project index', selected: 'Selected work', read: 'View', practice: 'Practice & education',
+      profile: 'Profile notes', availability: 'Available for selected projects', contact: 'Start a conversation',
+      colophon: 'Set in Manrope and IBM Plex Mono. Built with Astro.',
+    };
+---
+<ShowcaseLayout content={content} design="midnight" designTitle="Midnight Index">
+  <header class="mi-header">
+    <a class="mi-wordmark" href={`/${content.locale}/midnight/`}><b>A</b><span>Arthur<br />Aktamirov</span></a>
+    <div class="mi-header-center"><span>{copy.archive}</span><i></i><span>{copy.issue}</span></div>
+    <nav aria-label="Primary">
+      <a href="#index">{content.nav.work}</a>
+      <a href="#practice">{content.nav.journey}</a>
+      <a href="#profile">{content.nav.lab}</a>
+      <a href={`/${other}/midnight/`} lang={other}>{other.toUpperCase()}</a>
+    </nav>
+  </header>
+
+  <main id="variant-main">
+    <section class="mi-hero">
+      <div class="mi-hero-meta">
+        <span>49.0069° N</span>
+        <span>08.4037° E</span>
+        <span>BW / DE</span>
+      </div>
+      <div class="mi-hero-main">
+        <p class="mi-kicker"><i></i>{copy.intro}</p>
+        <h1><span>Arthur</span><span>“ZAROC”</span><span>Aktamirov</span></h1>
+        <div class="mi-hero-lower">
+          <p>{copy.statement}</p>
+          <a href="#index"><span>{content.hero.primary}</span><b>↓</b></a>
+        </div>
+      </div>
+      <div class="mi-monogram" aria-hidden="true">
+        <div class="mi-orbit"><i></i></div>
+        <span>ZA</span><small>02—26</small>
+      </div>
+      <p class="mi-scroll">SCROLL TO INDEX <span>↓</span></p>
+    </section>
+
+    <section class="mi-index" id="index" aria-labelledby="mi-index-title">
+      <div class="mi-section-label"><span>01</span><p>{copy.index}</p><small>{content.work.projects.length.toString().padStart(2, '0')} ENTRIES</small></div>
+      <header class="mi-section-title"><h2 id="mi-index-title">{copy.selected}</h2><p>{content.work.intro}</p></header>
+      <div class="mi-project-list">
+        {content.work.projects.map((project, index) => (
+          <article class:list={['mi-project-row', { 'is-key': index < 2 }]}>
+            <span class="mi-project-number">{project.index}</span>
+            <div class="mi-project-name"><h3>{project.title}</h3><p>{project.description}</p></div>
+            <ul>{project.tags.map((tag) => <li>{tag}</li>)}</ul>
+            <span class="mi-project-status">{project.status}</span>
+            {project.href ? <a href={project.href} target="_blank" rel="noreferrer" aria-label={`${copy.read} ${project.title}`}>{copy.read}<b>↗</b></a> : <span></span>}
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mi-practice" id="practice" aria-labelledby="mi-practice-title">
+      <div class="mi-section-label"><span>02</span><p>{copy.practice}</p><small>2018—2026</small></div>
+      <header class="mi-section-title"><h2 id="mi-practice-title">{content.journey.title}</h2><p>{content.journey.intro}</p></header>
+      <div class="mi-practice-grid">
+        {content.journey.items.map((item, index) => (
+          <article class:list={{ 'mi-practice-item': true, wide: index === 0 || index === 3 }}>
+            <span>{item.date}</span>
+            <h3>{item.title}</h3>
+            {item.place && <small>{item.place}</small>}
+            <p>{item.description}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mi-profile" id="profile" aria-labelledby="mi-profile-title">
+      <div class="mi-section-label"><span>03</span><p>{copy.profile}</p><small>OFF DUTY</small></div>
+      <header class="mi-section-title"><h2 id="mi-profile-title">{content.lab.title}</h2><p>{content.lab.intro}</p></header>
+      <div class="mi-profile-notes">
+        {content.lab.cards.map((card) => <article><span>{card.code}</span><h3>{card.title}</h3><p>{card.description}</p></article>)}
+      </div>
+      <blockquote>“{content.lab.quote}”</blockquote>
+    </section>
+
+    <section class="mi-contact" id="contact">
+      <div><i></i><span>{copy.availability}</span></div>
+      <h2>{content.contact.title}</h2>
+      <a href="mailto:arthur.aktamirov@zaroc.de">{copy.contact}<span>↗</span></a>
+    </section>
+  </main>
+
+  <footer class="mi-footer"><span>© {new Date().getFullYear()} Arthur Aktamirov</span><span>{copy.colophon}</span><a href="https://github.com/zaroc-dev">GitHub ↗</a></footer>
+</ShowcaseLayout>

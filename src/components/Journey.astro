@@ -1,0 +1,35 @@
+---
+import type { SiteContent } from '../content';
+interface Props { content: SiteContent }
+const { content } = Astro.props;
+---
+<section class="section journey-section" id="journey" aria-labelledby="journey-title">
+  <div class="shell journey-layout">
+    <header class="section-heading vertical" data-reveal>
+      <p class="eyebrow"><span>02</span>{content.journey.eyebrow}</p>
+      <h2 id="journey-title">{content.journey.title}</h2>
+      <p>{content.journey.intro}</p>
+      <div class="journey-sigil" aria-hidden="true">
+        <svg viewBox="0 0 180 180"><circle cx="90" cy="90" r="64"/><circle cx="90" cy="90" r="31"/><path d="m90 11 17 48 48 17-48 17-17 48-17-48-48-17 48-17 17-48Z"/><path d="m36 36 108 108m0-108L36 144"/></svg>
+      </div>
+    </header>
+
+    <div class="timeline">
+      {content.journey.items.map((item, index) => (
+        <article class:list={['timeline-item', { active: item.active }]} data-reveal>
+          <div class="timeline-marker"><i></i></div>
+          <div class="timeline-date">{item.date}</div>
+          <div class="timeline-content">
+            <div class="timeline-title">
+              <h3>{item.title}</h3>
+              {item.active && <span>{content.journey.present}</span>}
+            </div>
+            {item.place && <p class="timeline-place">{item.place}</p>}
+            <p>{item.description}</p>
+          </div>
+          <span class="timeline-index" aria-hidden="true">0{index + 1}</span>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

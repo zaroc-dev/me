@@ -1,0 +1,38 @@
+---
+import '../styles/variants.css';
+import type { SiteContent } from '../content';
+import DesignSwitcher from '../components/DesignSwitcher.astro';
+import { withBase } from '../utils/paths';
+
+interface Props {
+  content: SiteContent;
+  design: 'midnight' | 'codex' | 'riceos' | 'zarocos';
+  designTitle: string;
+}
+const { content, design, designTitle } = Astro.props;
+const path = design === 'zarocos' ? `/${content.locale}/` : `/${content.locale}/${design}/`;
+const canonical = new URL(withBase(path), Astro.site);
+---
+<!doctype html>
+<html lang={content.locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="theme-color" content="#1e2030" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="description" content={content.meta.description} />
+    <meta property="og:title" content={`${designTitle} — ${content.meta.title}`} />
+    <meta property="og:description" content={content.meta.description} />
+    <meta property="og:type" content="website" />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="en" href={new URL(withBase(design === 'zarocos' ? '/en/' : `/en/${design}/`), Astro.site)} />
+    <link rel="alternate" hreflang="de" href={new URL(withBase(design === 'zarocos' ? '/de/' : `/de/${design}/`), Astro.site)} />
+    <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
+    <title>{designTitle} — {content.meta.title}</title>
+  </head>
+  <body class={`variant-page theme-${design}`}>
+    <a class="variant-skip" href="#variant-main">{content.skip}</a>
+    <slot />
+    {design !== 'zarocos' && <DesignSwitcher locale={content.locale} current={design} />}
+  </body>
+</html>

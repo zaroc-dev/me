@@ -1,0 +1,22 @@
+---
+import { withBase } from '../utils/paths';
+const defaultPath = withBase('/en/');
+const germanPath = withBase('/de/');
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="robots" content="noindex" />
+    <title>ZAROC</title>
+    <link rel="canonical" href={new URL(defaultPath, Astro.site)} />
+    <script is:inline define:vars={{ defaultPath, germanPath }}>
+      const target = navigator.language?.toLowerCase().startsWith('de') ? germanPath : defaultPath;
+      window.location.replace(target);
+    </script>
+  </head>
+  <body style="background:#11111b;color:#cdd6f4;font-family:system-ui;padding:2rem">
+    <p>Continue in <a style="color:#8aadf4" href={defaultPath}>English</a> or <a style="color:#8aadf4" href={germanPath}>Deutsch</a>.</p>
+  </body>
+</html>

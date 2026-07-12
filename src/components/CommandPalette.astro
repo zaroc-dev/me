@@ -1,0 +1,89 @@
+---
+import type { SiteContent } from '../content';
+interface Props { content: SiteContent }
+const { content } = Astro.props;
+const otherLocale = content.locale === 'en' ? 'de' : 'en';
+const commands = [
+  { group: content.command.navigation, label: content.nav.work, detail: '#work', href: '#work', icon: '01' },
+  { group: content.command.navigation, label: content.nav.journey, detail: '#journey', href: '#journey', icon: '02' },
+  { group: content.command.navigation, label: content.nav.lab, detail: '#lab', href: '#lab', icon: '03' },
+  { group: content.command.navigation, label: content.nav.contact, detail: '#contact', href: '#contact', icon: '04' },
+  ...content.work.projects.slice(0, 5).map((project) => ({
+    group: content.command.projects, label: project.title, detail: project.tags.join(' · '), href: `#work`, icon: project.index,
+  })),
+  { group: content.command.actions, label: otherLocale === 'de' ? 'Auf Deutsch wechseln' : 'Switch to English', detail: `/${otherLocale}/`, href: `/${otherLocale}/`, icon: '↔' },
+  { group: content.command.actions, label: 'GitHub', detail: '@zaroc-dev', href: 'https://github.com/zaroc-dev', icon: 'GH' },
+];
+---
+<dialog class="command-dialog" data-command-dialog aria-label={content.command.open}>
+  <div class="command-box">
+    <div class="command-search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16 16 4 4"/></svg>
+      <input type="search" placeholder={content.command.placeholder} autocomplete="off" data-command-input />
+      <kbd>ESC</kbd>
+    </div>
+    <div class="command-results" data-command-results>
+      {commands.map((command) => (
+        <a href={command.href} data-command-item data-search={`${command.label} ${command.detail} ${command.group}`.toLowerCase()}>
+          <span class="command-icon">{command.icon}</span>
+          <span class="command-label"><strong>{command.label}</strong><small>{command.detail}</small></span>
+          <span class="command-group">{command.group}</span>
+          <span class="command-enter">↵</span>
+        </a>
+      ))}
+      <p class="command-empty" data-command-empty>{content.command.empty}</p>
+    </div>
+    <div class="command-help"><span><kbd>↑</kbd><kbd>↓</kbd> navigate</span><span><kbd>↵</kbd> {content.command.hint}</span></div>
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('[data-command-dialog]');
+  const input = dialog?.querySelector<HTMLInputElement>('[data-command-input]');
+  const items = [...(dialog?.querySelectorAll<HTMLAnchorElement>('[data-command-item]') || [])];
+  const empty = dialog?.querySelector<HTMLElement>('[data-command-empty]');
+  let activeIndex = 0;
+
+  const visibleItems = () => items.filter((item) => !item.hidden);
+  const setActive = (index: number) => {
+    const visible = visibleItems();
+    visible.forEach((item) => item.classList.remove('is-active'));
+    activeIndex = Math.max(0, Math.min(index, visible.length - 1));
+    visible[activeIndex]?.classList.add('is-active');
+    visible[activeIndex]?.scrollIntoView({ block: 'nearest' });
+  };
+  const open = () => {
+    dialog?.showModal();
+    document.body.classList.add('dialog-open');
+    input?.focus();
+    setActive(0);
+  };
+  const close = () => {
+    dialog?.close();
+    document.body.classList.remove('dialog-open');
+    if (input) input.value = '';
+    items.forEach((item) => item.hidden = false);
+  };
+
+  document.querySelectorAll('[data-command-open]').forEach((button) => button.addEventListener('click', open));
+  document.addEventListener('keydown', (event) => {
+    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+      event.preventDefault();
+      dialog?.open ? close() : open();
+    }
+  });
+  dialog?.addEventListener('click', (event) => { if (event.target === dialog) close(); });
+  dialog?.addEventListener('close', () => document.body.classList.remove('dialog-open'));
+  input?.addEventListener('input', () => {
+    const query = input.value.trim().toLowerCase();
+    items.forEach((item) => item.hidden = !item.dataset.search?.includes(query));
+    if (empty) empty.hidden = visibleItems().length > 0;
+    setActive(0);
+  });
+  input?.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowDown') { event.preventDefault(); setActive(activeIndex + 1); }
+    if (event.key === 'ArrowUp') { event.preventDefault(); setActive(activeIndex - 1); }
+    if (event.key === 'Enter') { event.preventDefault(); visibleItems()[activeIndex]?.click(); close(); }
+  });
+  items.forEach((item) => item.addEventListener('click', close));
+</script>

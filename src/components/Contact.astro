@@ -1,0 +1,40 @@
+---
+import type { SiteContent } from '../content';
+interface Props { content: SiteContent }
+const { content } = Astro.props;
+---
+<section class="contact-section" id="contact" aria-labelledby="contact-title">
+  <div class="contact-orbit" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="shell contact-inner" data-reveal>
+    <p class="eyebrow"><span>04</span>{content.contact.eyebrow}</p>
+    <h2 id="contact-title">{content.contact.title}</h2>
+    <p>{content.contact.intro}</p>
+    <div class="contact-actions">
+      <a class="button primary large" href="mailto:arthur.aktamirov@zaroc.de">
+        <span>arthur.aktamirov@zaroc.de</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-5-5 5 5-5 5" /></svg>
+      </a>
+      <button class="button ghost large" type="button" data-copy=".zaroc." data-copied={content.contact.copied}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 8h11v11H8zM5 16H4V4h12v1" /></svg>
+        <span data-copy-label>{content.contact.copy}</span>
+      </button>
+    </div>
+    <div class="social-row" aria-label={content.contact.linksLabel}>
+      <a href="https://github.com/zaroc-dev" target="_blank" rel="noreferrer">GitHub <span>↗</span></a>
+      <a href="https://www.linkedin.com/in/arthur-aktamirov/" target="_blank" rel="noreferrer">LinkedIn <span>↗</span></a>
+      <a href="https://x.com/zaroc_dev" target="_blank" rel="noreferrer">X / Twitter <span>↗</span></a>
+      <a href="https://www.instagram.com/ar_zaroc/" target="_blank" rel="noreferrer">Instagram <span>↗</span></a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="shell footer-inner">
+    <div class="footer-brand"><span class="brand-mark" aria-hidden="true">Z</span><span>ZAROC // {new Date().getFullYear()}</span></div>
+    <p>{content.footer.built}</p>
+    <div class="footer-links">
+      <a href="https://github.com/zaroc-dev" target="_blank" rel="noreferrer">{content.footer.source} ↗</a>
+      <a href="#top">{content.footer.backToTop} ↑</a>
+    </div>
+  </div>
+</footer>
