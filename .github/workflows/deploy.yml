@@ -23,9 +23,6 @@ jobs:
 
       - name: Install, build, and upload site
         uses: withastro/action@v6
-        env:
-          SITE_URL: ${{ vars.SITE_URL }}
-          BASE_PATH: ${{ vars.BASE_PATH }}
 
   deploy:
     needs: build
